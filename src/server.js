@@ -10,7 +10,6 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const app = express();
 const server = http.createServer(app);
 
-// Use a global variable for socket.io so services can emit events easily
 global.io = new Server(server, {
   cors: {
     origin: '*',
@@ -21,7 +20,10 @@ global.io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
-// Routes
+app.get('/', (req, res) => {
+  res.send("CloudTest Backend Running 🚀");
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/resource', resourceRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -34,6 +36,7 @@ global.io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
